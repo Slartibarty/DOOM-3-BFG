@@ -103,6 +103,7 @@ project( "Game" )
 	--pchheader( "../idlib/precompiled.h" )
 
 	files( { "neo/d3xp/**" } )
+	removefiles( { "neo/d3xp/EndLevel.*", "neo/d3xp/gamesys/Callbacks.cpp", "neo/d3xp/menus/MenuWidget_DevList.cpp" } )
 
 project( "Doom3BFG" )
 	kind( "WindowedApp" )
