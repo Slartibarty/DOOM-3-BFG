@@ -569,7 +569,7 @@ Sys_ListFiles
 int Sys_ListFiles( const char *directory, const char *extension, idStrList &list ) {
 	idStr		search;
 	struct _finddata_t findinfo;
-	int			findhandle;
+	intptr_t	findhandle;
 	int			flag;
 
 	if ( !extension) {
@@ -1264,7 +1264,8 @@ void Win_Frame() {
 	}
 }
 
-extern "C" { void _chkstk( int size ); };
+#if 0
+
 void clrstk();
 
 /*
@@ -1291,6 +1292,8 @@ void HackChkStk() {
 
 	TestChkStk();
 }
+
+#endif
 
 /*
 ====================

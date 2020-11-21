@@ -305,20 +305,20 @@ int idCollisionModelManagerLocal::RotateEdgeThroughEdge( cm_traceWork_t *tw, con
 	a = v0 - v2;
 	b = v1;
 	c = v0 + v2;
-	if ( a == 0.0f ) {
-		if ( b == 0.0f ) {
+	if ( a == 0.0 ) {
+		if ( b == 0.0 ) {
 			return false;
 		}
-		frac1 = -c / ( 2.0f * b );
+		frac1 = -c / ( 2.0 * b );
 		frac2 = 1e10;	// = tan( idMath::HALF_PI )
 	}
 	else {
 		d = b * b - c * a;
-		if ( d <= 0.0f ) {
+		if ( d <= 0.0 ) {
 			return false;
 		}
 		sqrtd = sqrt( d );
-		if ( b > 0.0f ) {
+		if ( b > 0.0 ) {
 			q = - b + sqrtd;
 		}
 		else {
@@ -425,20 +425,20 @@ int idCollisionModelManagerLocal::EdgeFurthestFromEdge( cm_traceWork_t *tw, cons
 	a = -v1;
 	b = -v2;
 	c = v1;
-	if ( a == 0.0f ) {
-		if ( b == 0.0f ) {
+	if ( a == 0.0 ) {
+		if ( b == 0.0 ) {
 			return false;
 		}
-		frac1 = -c / ( 2.0f * b );
+		frac1 = -c / ( 2.0 * b );
 		frac2 = 1e10;	// = tan( idMath::HALF_PI )
 	}
 	else {
 		d = b * b - c * a;
-		if ( d <= 0.0f ) {
+		if ( d <= 0.0 ) {
 			return false;
 		}
 		sqrtd = sqrt( d );
-		if ( b > 0.0f ) {
+		if ( b > 0.0 ) {
 			q = - b + sqrtd;
 		}
 		else {
@@ -453,7 +453,7 @@ int idCollisionModelManagerLocal::EdgeFurthestFromEdge( cm_traceWork_t *tw, cons
 		frac2 = -frac2;
 	}
 
-	if ( frac1 < 0.0f && frac2 < 0.0f ) {
+	if ( frac1 < 0.0 && frac2 < 0.0 ) {
 		return false;
 	}
 
@@ -676,20 +676,20 @@ int idCollisionModelManagerLocal::RotatePointThroughPlane( const cm_traceWork_t 
 	a = v0 - v2;
 	b = v1;
 	c = v0 + v2;
-	if ( a == 0.0f ) {
-		if ( b == 0.0f ) {
+	if ( a == 0.0 ) {
+		if ( b == 0.0 ) {
 			return false;
 		}
-		frac1 = -c / ( 2.0f * b );
+		frac1 = -c / ( 2.0 * b );
 		frac2 = 1e10;	// = tan( idMath::HALF_PI )
 	}
 	else {
 		d = b * b - c * a;
-		if ( d <= 0.0f ) {
+		if ( d <= 0.0 ) {
 			return false;
 		}
 		sqrtd = sqrt( d );
-		if ( b > 0.0f ) {
+		if ( b > 0.0 ) {
 			q = - b + sqrtd;
 		}
 		else {
@@ -781,20 +781,20 @@ int idCollisionModelManagerLocal::PointFurthestFromPlane( const cm_traceWork_t *
 	a = -v1;
 	b = -v2;
 	c = v1;
-	if ( a == 0.0f ) {
-		if ( b == 0.0f ) {
+	if ( a == 0.0 ) {
+		if ( b == 0.0 ) {
 			return false;
 		}
-		frac1 = -c / ( 2.0f * b );
+		frac1 = -c / ( 2.0 * b );
 		frac2 = 1e10;	// = tan( idMath::HALF_PI )
 	}
 	else {
 		d = b * b - c * a;
-		if ( d <= 0.0f ) {
+		if ( d <= 0.0 ) {
 			return false;
 		}
 		sqrtd = sqrt( d );
-		if ( b > 0.0f ) {
+		if ( b > 0.0 ) {
 			q = - b + sqrtd;
 		}
 		else {
@@ -809,7 +809,7 @@ int idCollisionModelManagerLocal::PointFurthestFromPlane( const cm_traceWork_t *
 		frac2 = -frac2;
 	}
 
-	if ( frac1 < 0.0f && frac2 < 0.0f ) {
+	if ( frac1 < 0.0 && frac2 < 0.0 ) {
 		return false;
 	}
 

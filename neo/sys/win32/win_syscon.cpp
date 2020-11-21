@@ -29,14 +29,6 @@ If you have questions concerning this license or the applicable additional terms
 #pragma hdrstop
 #include "../../idlib/precompiled.h"
 
-#include <errno.h>
-#include <float.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <direct.h>
-#include <io.h>
-#include <conio.h>
-
 #include "win_local.h"
 #include "rc/doom_resource.h"
 
@@ -94,7 +86,7 @@ typedef struct {
 
 static WinConData s_wcd;
 
-static LONG WINAPI ConWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+static LRESULT CALLBACK ConWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	char *cmdString;
 	static bool s_timePolarity;
 
@@ -116,7 +108,7 @@ static LONG WINAPI ConWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 			if ( ( HWND ) lParam == s_wcd.hwndBuffer ) {
 				SetBkColor( ( HDC ) wParam, RGB( 0x00, 0x00, 0x80 ) );
 				SetTextColor( ( HDC ) wParam, RGB( 0xff, 0xff, 0x00 ) );
-				return ( long ) s_wcd.hbrEditBackground;
+				return ( LRESULT ) s_wcd.hbrEditBackground;
 			} else if ( ( HWND ) lParam == s_wcd.hwndErrorBox ) {
 				if ( s_timePolarity & 1 ) {
 					SetBkColor( ( HDC ) wParam, RGB( 0x80, 0x80, 0x80 ) );
@@ -125,7 +117,7 @@ static LONG WINAPI ConWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 					SetBkColor( ( HDC ) wParam, RGB( 0x80, 0x80, 0x80 ) );
 					SetTextColor( ( HDC ) wParam, RGB( 0x00, 0x0, 0x00 ) );
 				}
-				return ( long ) s_wcd.hbrErrorBackground;
+				return ( LRESULT ) s_wcd.hbrErrorBackground;
 			}
 			break;
 		case WM_SYSCOMMAND:
@@ -188,7 +180,7 @@ static LONG WINAPI ConWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
     return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }
 
-LONG WINAPI InputLineWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK InputLineWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	int key, cursor;
 	switch ( uMsg ) {
 	case WM_KILLFOCUS:
@@ -295,7 +287,7 @@ void Sys_CreateConsole() {
 	wc.hInstance     = win32.hInstance;
 	wc.hIcon         = LoadIcon( win32.hInstance, MAKEINTRESOURCE(IDI_ICON1));
 	wc.hCursor       = LoadCursor (NULL,IDC_ARROW);
-	wc.hbrBackground = (struct HBRUSH__ *)COLOR_WINDOW;
+	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	wc.lpszMenuName  = 0;
 	wc.lpszClassName = DEDCLASS;
 
@@ -389,7 +381,7 @@ void Sys_CreateConsole() {
 												win32.hInstance, NULL );
 	SendMessage( s_wcd.hwndBuffer, WM_SETFONT, ( WPARAM ) s_wcd.hfBufferFont, 0 );
 
-	s_wcd.SysInputLineWndProc = ( WNDPROC ) SetWindowLong( s_wcd.hwndInputLine, GWL_WNDPROC, ( long ) InputLineWndProc );
+	s_wcd.SysInputLineWndProc = ( WNDPROC ) SetWindowLongPtr( s_wcd.hwndInputLine, GWLP_WNDPROC, ( LONG_PTR ) InputLineWndProc );
 	SendMessage( s_wcd.hwndInputLine, WM_SETFONT, ( WPARAM ) s_wcd.hfBufferFont, 0 );
 
 // don't show it now that we have a splash screen up

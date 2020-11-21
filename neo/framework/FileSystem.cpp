@@ -32,9 +32,7 @@ If you have questions concerning this license or the applicable additional terms
 #include "Unzip.h"
 #include "Zip.h"
 
-#ifdef WIN32
-	#include <io.h>	// for _read
-#else
+#ifndef WIN32
 	#if !__MACH__ && __MWERKS__
 		#include <types.h>
 		#include <stat.h>
@@ -2338,7 +2336,7 @@ void idFileSystemLocal::CreateCRCsForResourceFileList( const idFileList & list )
 		crcFilename.SetFileExtension( ".crc" );
 		std::auto_ptr<idFile> crcOutputFile( fileSystem->OpenFileWrite( crcFilename, "fs_basepath" ) );
 		if ( crcOutputFile.get() == NULL ) {
-			idLib::Printf( "Error writing CRC file %s.\n", crcFilename );
+			idLib::Printf( "Error writing CRC file %s.\n", crcFilename.c_str() );
 			continue;
 		}
 		
