@@ -236,18 +236,18 @@ bool idMenuScreen_Shell_PressStart::HandleAction( idWidgetAction & action, const
 				}
 			}
 			
-			if ( itemList->GetMoveToIndex() == 0 ) {
+			/*if ( itemList->GetMoveToIndex() == 0 ) {
 				common->SwitchToGame( DOOM_CLASSIC );
-			} else if ( itemList->GetMoveToIndex() == 1 ) {				
+			} else */if ( itemList->GetMoveToIndex() == 1 ) {				
 				if ( session->GetSignInManager().GetMasterLocalUser() == NULL ) {
 					const int device = event.parms[ 0 ].ToInteger();
 					session->GetSignInManager().RegisterLocalUser( device );
 				} else {
 					menuData->SetNextScreen( SHELL_AREA_ROOT, MENU_TRANSITION_SIMPLE );
 				}
-			} else if ( itemList->GetMoveToIndex() == 2 ) {	
+			}/* else if ( itemList->GetMoveToIndex() == 2 ) {	
 				common->SwitchToGame( DOOM2_CLASSIC );
-			}
+			}*/
 
 			return true;
 		}

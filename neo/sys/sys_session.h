@@ -99,8 +99,6 @@ public:
 		numSlots( MAX_PLAYERS ),
 		gameMode( GAME_MODE_RANDOM ),
 		gameMap( GAME_MAP_RANDOM ),
-		gameEpisode( GAME_EPISODE_UNKNOWN ),
-		gameSkill( GAME_SKILL_DEFAULT ),
 		matchFlags( 0 )
 	{}
 
@@ -110,8 +108,6 @@ public:
 	void Serialize( idSerializer & serializer ) {
 		serializer.Serialize( gameMode );
 		serializer.Serialize( gameMap );
-		serializer.Serialize( gameEpisode );
-		serializer.Serialize( gameSkill );
 		serializer.Serialize( numSlots );
 		serializer.Serialize( matchFlags );
 		serializer.SerializeString( mapName );
@@ -121,8 +117,6 @@ public:
 	uint8 	numSlots;
 	int8	gameMode;
 	int8 	gameMap;
-	int8	gameEpisode;		// Episode for doom classic support.
-	int8	gameSkill;			// Skill for doom classic support.
 	uint8	matchFlags;
 
 	idStr	mapName; // This is only used for SP (gameMap == GAME_MAP_SINGLEPLAYER)
