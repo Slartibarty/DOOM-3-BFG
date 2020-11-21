@@ -65,7 +65,8 @@ const int PMF_TIME_KNOCKBACK	= 64;		// movementTime is an air-accelerate only ti
 const int PMF_TIME_WATERJUMP	= 128;		// movementTime is waterjump
 const int PMF_ALL_TIMES			= (PMF_TIME_WATERJUMP|PMF_TIME_LAND|PMF_TIME_KNOCKBACK);
 
-int c_pmove = 0;
+// debug var
+static int c_pmove = 0;
 
 extern idCVar pm_clientInterpolation_Divergence;
 
