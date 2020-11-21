@@ -16,7 +16,7 @@ local build_dir = "build"
 
 workspace( "Neo" )
 	configurations( { conf_dbg, conf_rel, conf_rtl } )
-	platforms( { plat_win32 } )
+	platforms( { plat_win32, plat_win64 } )
 	location( build_dir )
 	preferredtoolarchitecture( "x86_64" )
 
@@ -28,9 +28,7 @@ flags( { "MultiProcessorCompile", "NoBufferSecurityCheck" } )
 staticruntime( "On" )
 cppdialect( "C++17" )
 warnings( "Extra" )
-vectorextensions( "SSE2" )
 floatingpoint( "Fast" )
-largeaddressaware( "On" )
 characterset( "ASCII" )
 rtti( "On" )
 
@@ -38,11 +36,14 @@ rtti( "On" )
 
 -- Config for all 32-bit projects
 filter( "platforms:" .. plat_win32 )
+	vectorextensions( "SSE2" )
+	largeaddressaware( "On" )
 	architecture( "x86" )
 filter( {} )
 
 -- Config for all 64-bit projects
 filter( "platforms:" .. plat_win64 )
+	vectorextensions( "AVX2" )
 	architecture( "x86_64" )
 filter( {} )
 

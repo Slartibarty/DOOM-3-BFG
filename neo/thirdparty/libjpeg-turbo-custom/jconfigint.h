@@ -17,7 +17,12 @@
 #define VERSION  "2.0.5"
 
 /* The size of `size_t', as computed by sizeof. */
+#ifdef _WIN64
 #define SIZEOF_SIZE_T  8
+#elif _WIN32
+#define SIZEOF_SIZE_T  4
+#endif
+
 
 /* Define if your compiler has __builtin_ctzl() and sizeof(unsigned long) == sizeof(size_t). */
 /* #undef HAVE_BUILTIN_CTZL */
@@ -26,9 +31,9 @@
 #define HAVE_INTRIN_H
 
 #if defined(_MSC_VER) && defined(HAVE_INTRIN_H)
-#if (SIZEOF_SIZE_T == 8)
+#if defined(_WIN64)
 #define HAVE_BITSCANFORWARD64
-#elif (SIZEOF_SIZE_T == 4)
+#elif defined(_WIN32)
 #define HAVE_BITSCANFORWARD
 #endif
 #endif
