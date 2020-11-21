@@ -34,7 +34,7 @@ warnings( "Extra" )
 vectorextensions( "SSE2" )
 floatingpoint( "Fast" )
 largeaddressaware( "On" )
---rtti( "On" )
+rtti( "On" )
 
 --defines( {  } )
 
@@ -98,6 +98,9 @@ project( "Game" )
 	kind( "StaticLib" )
 	language( "C++" )
 	defines( { "__DOOM__", "_D3XP", "CTF" } )
+	
+	--pchsource( "precompiled.cpp" )
+	--pchheader( "../idlib/precompiled.h" )
 
 	files( { "neo/d3xp/**" } )
 
