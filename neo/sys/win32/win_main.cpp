@@ -1384,6 +1384,8 @@ _except_handler
 EXCEPTION_DISPOSITION __cdecl _except_handler( struct _EXCEPTION_RECORD *ExceptionRecord, void * EstablisherFrame,
 												struct _CONTEXT *ContextRecord, void * DispatcherContext ) {
 
+#ifdef ID_WIN_X86_ASM
+
 	static char msg[ 8192 ];
 	char FPUFlags[2048];
 
@@ -1443,6 +1445,12 @@ EXCEPTION_DISPOSITION __cdecl _except_handler( struct _EXCEPTION_RECORD *Excepti
 	EmailCrashReport( msg );
 	common->FatalError( msg );
 
+#else
+
+	common->FatalError( "Blah blah blah! Fart fart fart!\n" );
+
+#endif
+
     // Tell the OS to restart the faulting instruction
     return ExceptionContinueExecution;
 }
@@ -1460,7 +1468,7 @@ EXCEPTION_DISPOSITION __cdecl _except_handler( struct _EXCEPTION_RECORD *Excepti
 WinMain
 ==================
 */
-int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow ) {
+int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow ) {
 
 	const HCURSOR hcurSave = ::SetCursor( LoadCursor( 0, IDC_WAIT ) );
 
@@ -1559,6 +1567,8 @@ clrstk
 I tried to get the run time to call this at every function entry, but
 ====================
 */
+#ifdef ID_WIN_X86_ASM
+
 static int	parmBytes;
 __declspec( naked ) void clrstk() {
 	// eax = bytes to add to stack
@@ -1586,7 +1596,10 @@ __declspec( naked ) void clrstk() {
         
         ret
 	}
+
 }
+
+#endif
 
 /*
 ==================

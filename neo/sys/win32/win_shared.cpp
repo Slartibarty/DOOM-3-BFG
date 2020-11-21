@@ -260,8 +260,7 @@ Sys_GetCurrentUser
 */
 char *Sys_GetCurrentUser() {
 	static char s_userName[1024];
-	unsigned long size = sizeof( s_userName );
-
+	DWORD size = sizeof( s_userName );
 
 	if ( !GetUserName( s_userName, &size ) ) {
 		strcpy( s_userName, "player" );
@@ -298,13 +297,13 @@ const int UNDECORATE_FLAGS =	UNDNAME_NO_MS_KEYWORDS |
 #if defined(_DEBUG) && 1
 
 typedef struct symbol_s {
-	int					address;
+	address_t			address;
 	char *				name;
 	struct symbol_s *	next;
 } symbol_t;
 
 typedef struct module_s {
-	int					address;
+	address_t			address;
 	char *				name;
 	symbol_t *			symbols;
 	struct module_s *	next;
@@ -361,7 +360,7 @@ int ParseHexNumber( const char **ptr ) {
 Sym_Init
 ==================
 */
-void Sym_Init( long addr ) {
+void Sym_Init( address_t addr ) {
 	TCHAR moduleName[MAX_STRING_CHARS];
 	MEMORY_BASIC_INFORMATION mbi;
 
@@ -382,7 +381,7 @@ void Sym_Init( long addr ) {
 	module_t *module = (module_t *) malloc( sizeof( module_t ) );
 	module->name = (char *) malloc( strlen( moduleName ) + 1 );
 	strcpy( module->name, moduleName );
-	module->address = (int)mbi.AllocationBase;
+	module->address = (address_t)mbi.AllocationBase;
 	module->symbols = NULL;
 	module->next = modules;
 	modules = module;
@@ -489,7 +488,7 @@ void Sym_Shutdown() {
 Sym_GetFuncInfo
 ==================
 */
-void Sym_GetFuncInfo( long addr, idStr &module, idStr &funcName ) {
+void Sym_GetFuncInfo( address_t addr, idStr &module, idStr &funcName ) {
 	MEMORY_BASIC_INFORMATION mbi;
 	module_t *m;
 	symbol_t *s;
@@ -497,7 +496,7 @@ void Sym_GetFuncInfo( long addr, idStr &module, idStr &funcName ) {
 	VirtualQuery( (void*)addr, &mbi, sizeof(mbi) );
 
 	for ( m = modules; m != NULL; m = m->next ) {
-		if ( m->address == (int) mbi.AllocationBase ) {
+		if ( m->address == (address_t) mbi.AllocationBase ) {
 			break;
 		}
 	}
@@ -662,6 +661,8 @@ void Sym_GetFuncInfo( long addr, idStr &module, idStr &funcName ) {
 
 #endif
 
+#ifdef ID_WIN_X86_ASM
+
 /*
 ==================
 GetFuncAddr
@@ -704,6 +705,8 @@ label:
 	return res;
 }
 
+#endif
+
 /*
 ==================
 Sys_GetCallStack
@@ -712,7 +715,7 @@ Sys_GetCallStack
 ==================
 */
 void Sys_GetCallStack( address_t *callStack, const int callStackSize ) {
-#if 1 //def _DEBUG
+#ifdef ID_WIN_X86_ASM //def _DEBUG
 	int i;
 	long m_ebp;
 
