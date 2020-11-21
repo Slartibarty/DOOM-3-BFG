@@ -29,7 +29,6 @@ includedirs( { "src/public" } )
 flags( { "MultiProcessorCompile", "NoBufferSecurityCheck" } )
 staticruntime( "On" )
 cppdialect( "C++17" )
-compileas( "C++" )
 warnings( "Extra" )
 vectorextensions( "SSE2" )
 floatingpoint( "Fast" )
@@ -52,7 +51,7 @@ filter( {} )
 -- Config for Windows
 filter( "system:windows" )
 	buildoptions( { "/permissive" } )
-	defines( { "WIN32", "_WINDOWS", "_CRT_SECURE_NO_WARNINGS", "_CRT_NONSTDC_NO_WARNINGS", "_USE_32BIT_TIME_T", "_HAS_AUTO_PTR_ETC" } )
+	defines( { "WIN32", "_WINDOWS", "_CRT_SECURE_NO_WARNINGS", "_CRT_NONSTDC_NO_WARNINGS", "_HAS_AUTO_PTR_ETC" } )
 filter( {} )
 	
 -- Config for Windows, release, clean this up!

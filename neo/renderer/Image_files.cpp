@@ -48,6 +48,8 @@ void R_LoadImage( const char *name, byte **pic, int *width, int *height, bool ma
  * You may also wish to include "jerror.h".
  */
 
+#include "../thirdparty/libjpeg-turbo-custom/jconfig.h"
+#include "../thirdparty/libjpeg-turbo-custom/jconfigint.h"
 #include "../thirdparty/libjpeg-turbo/jpeglib.h"
 
 // hooks from jpeg lib to our system

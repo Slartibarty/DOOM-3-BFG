@@ -38,7 +38,7 @@ local zlib_srcs = {
 
 project( "zlib" )
 	kind( "StaticLib" )
-	language( "C++" )
+	language( "C" )
 	
 	files( { zlib_public_hdrs, zlib_private_hdrs, zlib_srcs } )
 	
@@ -105,6 +105,7 @@ local jpeg_srcs = {
 
 project( "libjpeg-turbo" )
 	kind( "StaticLib" )
-	language( "C++" )
+	language( "C" )
+	includedirs( { "neo/thirdparty/libjpeg-turbo-custom" } )
 	
 	files( { jpeg_hdrs, jpeg_srcs } )
