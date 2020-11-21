@@ -1,0 +1,4 @@
+[submodule "neo/thirdparty/zlib"]
+	path = neo/thirdparty/zlib
+	url = https://github.com/madler/zlib.git
+	branch = develop
