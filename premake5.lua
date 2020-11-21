@@ -49,7 +49,7 @@ filter( {} )
 
 -- Config for Windows
 filter( "system:windows" )
-	--buildoptions( { "/Zc:preprocessor" } )
+	buildoptions( { "/permissive" } )
 	defines( { "WIN32", "_WINDOWS", "_CRT_SECURE_NO_WARNINGS", "_CRT_NONSTDC_NO_WARNINGS", "_USE_32BIT_TIME_T", "_HAS_AUTO_PTR_ETC" } )
 filter( {} )
 	

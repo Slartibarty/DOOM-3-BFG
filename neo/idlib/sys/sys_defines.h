@@ -179,10 +179,28 @@ bulk of the codebase, so it is the best place for analyze pragmas.
 // win32 needs this, but 360 doesn't
 #pragma warning( disable: 6540 )	// warning C6540: The use of attribute annotations on this function will invalidate all of its existing __declspec annotations [D:\tech5\engine\engine-10.vcxproj]
 
+// ignorable warnings introduced with the VS 2019 upgrade
+#pragma warning( disable: 4456 )	// warning C4456: declaration of 'k' hides previous local declaration
+#pragma warning( disable: 4457 )	// warning C4457: declaration of 'type' hides function parameter
+#pragma warning( disable: 4458 )	// warning C4458: declaration of 'silent' hides class member
+#pragma warning( disable: 4459 )	// warning C4459: declaration of 'vertexCache' hides global declaration
+#pragma warning( disable: 4595 )	// warning C4595: 'operator new': non-member operator new or delete functions may not be declared inline
+#pragma warning( disable: 4499 )	// warning C4499: 'extern': an explicit specialization cannot have a storage class (ignored)
+// ATL attributes have been deprecated
+#pragma warning( disable: 4467 )	// warning C4467: usage of ATL attributes is deprecated
+// This is a very new warning, it recommends: "to simplify migration, consider the temporary use of /Wv:18 flag"
+#pragma warning( disable: 5205 )	// warning C5205: delete of an abstract class 'idSIMDProcessor' that has a non-virtual destructor results in undefined behavior
+// DirectInput does this, we can't help it!
+#pragma warning( disable: 4644 )	// warning C4644: usage of the macro-based offsetof pattern in constant expressions is non-standard; use offsetof defined in the C++ standard library instead
+
+// C++17/20 warnings
+#pragma warning( disable: 5033 )	// warning C5033: 'register' is no longer a supported storage class
+#pragma warning( disable: 5054 )	// warning C5054: operator '+': deprecated between enumerations of different types
+#pragma warning( disable: 5055 )	// warning C5055: operator '==': deprecated between enumerations and floating-point types
 
 // checking format strings catches a LOT of errors
-#include <CodeAnalysis\SourceAnnotations.h>
-#define	VERIFY_FORMAT_STRING	[SA_FormatString(Style="printf")]
+//#include <CodeAnalysis\SourceAnnotations.h>
+#define	VERIFY_FORMAT_STRING
 
 
 // We need to inform the compiler that Error() and FatalError() will
