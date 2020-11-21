@@ -82,12 +82,9 @@ typedef enum {
 
 #define OPERATION_SET 1
 
-#include <dxsdkver.h>
-
 #include <xaudio2.h>
+#include <xapo.h>
 #include <xaudio2fx.h>
-#include <X3DAudio.h>
-#include <xma2defs.h>
 #include "XAudio2/XA2_SoundSample.h"
 #include "XAudio2/XA2_SoundVoice.h"
 #include "XAudio2/XA2_SoundHardware.h"
