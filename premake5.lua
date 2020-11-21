@@ -34,6 +34,7 @@ warnings( "Extra" )
 vectorextensions( "SSE2" )
 floatingpoint( "Fast" )
 largeaddressaware( "On" )
+characterset( "ASCII" )
 rtti( "On" )
 
 --defines( {  } )
@@ -111,3 +112,4 @@ project( "Doom3BFG" )
 	defines( { "__DOOM__" } )
 
 	files( { "neo/aas/**", "neo/cm/**", "neo/framework/**", "neo/renderer/**", "neo/sound/**", "neo/swf/**", "neo/sys/**", "neo/ui/**" } )
+	removefiles( { "neo/framework/Session.cpp" } )
