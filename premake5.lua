@@ -3,9 +3,9 @@
 -------------------------------------------------------------------------------
 
 -- Convenience locals
-local conf_dbg = "debug"
-local conf_rel = "release"
-local conf_rtl = "retail"
+local conf_dbg = "Debug"
+local conf_rel = "Release"
+local conf_rtl = "Retail"
 
 local plat_win32 = "x86"
 local plat_win64 = "x64"
@@ -14,7 +14,7 @@ local build_dir = "build"
 
 -- Workspace definition -------------------------------------------------------
 
-workspace( "doom3bfg" )
+workspace( "Neo" )
 	configurations( { conf_dbg, conf_rel, conf_rtl } )
 	platforms( { plat_win32 } )
 	location( build_dir )
@@ -28,12 +28,13 @@ includedirs( { "src/public" } )
 
 flags( { "MultiProcessorCompile", "NoBufferSecurityCheck" } )
 staticruntime( "On" )
-cppdialect( "C++20" )
+cppdialect( "C++17" )
 compileas( "C++" )
 warnings( "Extra" )
 vectorextensions( "SSE2" )
 floatingpoint( "Fast" )
-rtti( "On" )
+largeaddressaware( "On" )
+--rtti( "On" )
 
 --defines( {  } )
 
@@ -86,9 +87,23 @@ filter( {} )
 
 -- Project definitions --------------------------------------------------------
 
-project( "idlib" )
+project( "idLib" )
 	kind( "StaticLib" )
 	language( "C++" )
 	defines( { "__IDLIB__" } )
 
-	files( { "neo/idlib/**.*" } )
+	files( { "neo/idlib/**" } )
+	
+project( "Game" )
+	kind( "StaticLib" )
+	language( "C++" )
+	defines( { "__DOOM__", "_D3XP", "CTF" } )
+
+	files( { "neo/d3xp/**" } )
+
+project( "Doom3BFG" )
+	kind( "WindowedApp" )
+	language( "C++" )
+	defines( { "__DOOM__" } )
+
+	files( { "neo/aas/**", "neo/cm/**", "neo/framework/**", "neo/renderer/**", "neo/sound/**", "neo/swf/**", "neo/sys/**", "neo/ui/**" } )
