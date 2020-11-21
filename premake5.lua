@@ -24,8 +24,6 @@ workspace( "Neo" )
 
 -- Misc flags for all projects
 
-includedirs( { "src/public" } )
-
 flags( { "MultiProcessorCompile", "NoBufferSecurityCheck" } )
 staticruntime( "On" )
 cppdialect( "C++17" )
