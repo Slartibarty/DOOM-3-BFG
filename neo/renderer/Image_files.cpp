@@ -49,7 +49,7 @@ void R_LoadImage( const char *name, byte **pic, int *width, int *height, bool ma
  */
 
 #include "../thirdparty/libjpeg-turbo-custom/jconfig.h"
-#include "../thirdparty/libjpeg-turbo-custom/jconfigint.h"
+#define JCONFIG_INCLUDED
 #include "../thirdparty/libjpeg-turbo/jpeglib.h"
 
 // hooks from jpeg lib to our system
@@ -124,13 +124,13 @@ TGA files are used for 24/32 bit images
 ========================================================================
 */
 
-typedef struct _TargaHeader {
+struct TargaHeader {
 	unsigned char 	id_length, colormap_type, image_type;
 	unsigned short	colormap_index, colormap_length;
 	unsigned char	colormap_size;
 	unsigned short	x_origin, y_origin, width, height;
 	unsigned char	pixel_size, attributes;
-} TargaHeader;
+};
 
 
 /*
@@ -430,8 +430,10 @@ static void LoadJPG( const char *filename, unsigned char **pic, int *width, int 
   if ( pic ) {
 	*pic = NULL;		// until proven otherwise
   }
+
+  int	len;
+
   {
-		int		len;
 		idFile *f;
 
 		f = fileSystem->OpenFileRead( filename );
@@ -466,7 +468,7 @@ static void LoadJPG( const char *filename, unsigned char **pic, int *width, int 
 
   /* Step 2: specify data source (eg, a file) */
 
-  jpeg_stdio_src(&cinfo, fbuffer);
+  jpeg_mem_src(&cinfo, fbuffer, len);
 
   /* Step 3: read file parameters with jpeg_read_header() */
 

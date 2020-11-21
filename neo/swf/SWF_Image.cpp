@@ -29,7 +29,9 @@ If you have questions concerning this license or the applicable additional terms
 #include "../idlib/precompiled.h"
 #include "../renderer/Image.h"
 //#include "../../renderer/ImageTools/ImageProcess.h"
-#include "../renderer/jpeg-6/jpeglib.h"
+#include "../thirdparty/libjpeg-turbo-custom/jconfig.h"
+#define JCONFIG_INCLUDED
+#include "../thirdparty/libjpeg-turbo/jpeglib.h"
 
 /*
 ========================
