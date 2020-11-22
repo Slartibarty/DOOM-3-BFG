@@ -126,6 +126,8 @@ idSIMDProcessor *p_generic;
 long baseClocks = 0;
 
 
+#ifdef ID_WIN_X86_ASM
+
 #define TIME_TYPE int
 
 #pragma warning(disable : 4731)     // frame pointer register 'ebx' modified by inline assembly code
@@ -149,6 +151,16 @@ long saved_ebx = 0;
 	__asm mov ebx, saved_ebx				\
 	__asm xor eax, eax						\
 	__asm cpuid
+
+#else
+
+#define TIME_TYPE int
+
+#define StartRecordTime( start )	start = Sys_Milliseconds();
+
+#define StopRecordTime( end )	end = Sys_Milliseconds();
+
+#endif
 
 
 #define GetBest( start, end, best )			\
