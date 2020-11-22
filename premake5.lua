@@ -49,7 +49,7 @@ filter( {} )
 
 -- Config for Windows
 filter( "system:windows" )
-	buildoptions( { "/permissive" } )
+	buildoptions( { "/permissive", "/Zc:__cplusplus" } )
 	defines( { "WIN32", "_WINDOWS", "_CRT_SECURE_NO_WARNINGS", "_CRT_NONSTDC_NO_WARNINGS", "_HAS_AUTO_PTR_ETC" } )
 filter( {} )
 	
@@ -94,26 +94,42 @@ project( "idLib" )
 	kind( "StaticLib" )
 	language( "C++" )
 	defines( { "__IDLIB__" } )
+	
+	pchsource( "neo/idlib/precompiled.cpp" )
+	pchheader( "" )
 
 	files( { "neo/idlib/**" } )
+	
+	-- Some files don't want to be in the PCH, filter them out here! (They're ported from idTech5)
+	filter( "files:neo/idlib/geometry/RenderMatrix.cpp or files:neo/idlib/SoftwareCache.cpp" )
+		flags( { "NoPCH" } )
+	filter( {} )
 	
 project( "Game" )
 	kind( "StaticLib" )
 	language( "C++" )
 	defines( { "__DOOM__", "_D3XP", "CTF" } )
 	
-	--pchsource( "precompiled.cpp" )
-	--pchheader( "../idlib/precompiled.h" )
+	pchsource( "neo/d3xp/precompiled.cpp" )
+	pchheader( "" )
 
 	files( { "neo/d3xp/**" } )
 	removefiles( { "neo/d3xp/EndLevel.*", "neo/d3xp/gamesys/Callbacks.cpp", "neo/d3xp/menus/MenuWidget_DevList.cpp" } )
-
+	
 project( "Doom3BFG" )
 	kind( "WindowedApp" )
 	language( "C++" )
 	defines( { "__DOOM__" } )
 	links( { "xaudio2", "xinput", "dinput8", "dxguid", "opengl32", "winmm", "dbghelp", "ws2_32" } )
 	links( { "zlib", "libjpeg-turbo", "idLib", "Game" } )
+	
+	pchsource( "neo/framework/precompiled.cpp" )
+	pchheader( "" )
 
 	files( { "neo/aas/**", "neo/cm/**", "neo/framework/**", "neo/renderer/**", "neo/sound/**", "neo/swf/**", "neo/sys/**", "neo/ui/**" } )
 	removefiles( { "neo/framework/Session.cpp", "neo/ui/GameWindow.cpp", "neo/sys/win32/win_stats.*", "neo/sys/win32/win_snd.cpp", "neo/sys/win32/win_gamma.cpp", "neo/renderer/BoundsTrack.cpp" } )
+	
+	-- Jobs don't use the PCH because they're funny
+	filter( "files:neo/renderer/jobs/**.cpp" )
+		flags( { "NoPCH" } )
+	filter( {} )

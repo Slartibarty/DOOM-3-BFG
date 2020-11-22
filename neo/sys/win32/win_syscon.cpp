@@ -44,7 +44,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #define	COMMAND_HISTORY	64
 
-typedef struct {
+static struct WinConData {
 	HWND		hWnd;
 	HWND		hwndBuffer;
 
@@ -82,9 +82,7 @@ typedef struct {
 
 	idEditField	consoleField;
 
-} WinConData;
-
-static WinConData s_wcd;
+} s_wcd;
 
 static LRESULT CALLBACK ConWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	char *cmdString;
@@ -147,26 +145,6 @@ static LRESULT CALLBACK ConWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 			s_wcd.hbrErrorBackground = CreateSolidBrush( RGB( 0x80, 0x80, 0x80 ) );
 			SetTimer( hWnd, 1, 1000, NULL );
 			break;
-/*
-		case WM_ERASEBKGND:
-			HGDIOBJ oldObject;
-			HDC hdcScaled;
-			hdcScaled = CreateCompatibleDC( ( HDC ) wParam );
-			assert( hdcScaled != 0 );
-			if ( hdcScaled ) {
-				oldObject = SelectObject( ( HDC ) hdcScaled, s_wcd.hbmLogo );
-				assert( oldObject != 0 );
-				if ( oldObject )
-				{
-					StretchBlt( ( HDC ) wParam, 0, 0, s_wcd.windowWidth, s_wcd.windowHeight, 
-						hdcScaled, 0, 0, 512, 384,
-						SRCCOPY );
-				}
-				DeleteDC( hdcScaled );
-				hdcScaled = 0;
-			}
-			return 1;
-*/
 		case WM_TIMER:
 			if ( wParam == 1 ) {
 				s_timePolarity = (bool)!s_timePolarity;
