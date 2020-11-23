@@ -1407,9 +1407,9 @@ void R_SampleCubeMap( const idVec3 &dir, int size, byte *buffers[6], byte result
 	float	adir[3];
 	int		axis, x, y;
 
-	adir[0] = fabs(dir[0]);
-	adir[1] = fabs(dir[1]);
-	adir[2] = fabs(dir[2]);
+	adir[0] = idMath::Fabs(dir[0]);
+	adir[1] = idMath::Fabs(dir[1]);
+	adir[2] = idMath::Fabs(dir[2]);
 
 	if ( dir[0] >= adir[1] && dir[0] >= adir[2] ) {
 		axis = 0;
@@ -1430,8 +1430,8 @@ void R_SampleCubeMap( const idVec3 &dir, int size, byte *buffers[6], byte result
 
 	fx = -fx;
 	fy = -fy;
-	x = size * 0.5 * (fx + 1);
-	y = size * 0.5 * (fy + 1);
+	x = size * 0.5f * (fx + 1);
+	y = size * 0.5f * (fy + 1);
 	if ( x < 0 ) {
 		x = 0;
 	} else if ( x >= size ) {
@@ -1465,7 +1465,7 @@ void R_MakeAmbientMap_f( const idCmdArgs &args ) {
 	renderView_t	ref;
 	viewDef_t	primary;
 	int			downSample;
-	char	*extensions[6] =  { "_px.tga", "_nx.tga", "_py.tga", "_ny.tga", 
+	const char	*extensions[6] =  { "_px.tga", "_nx.tga", "_py.tga", "_ny.tga", 
 		"_pz.tga", "_nz.tga" };
 	int			outSize;
 	byte		*buffers[6];
@@ -1537,11 +1537,11 @@ void R_MakeAmbientMap_f( const idCmdArgs &args ) {
 					idVec3	dir;
 					float	total[3];
 
-					dir = cubeAxis[i][0] + -( -1 + 2.0*x/(outSize-1) ) * cubeAxis[i][1] + -( -1 + 2.0*y/(outSize-1) ) * cubeAxis[i][2];
+					dir = cubeAxis[i][0] + -( -1 + 2.0f*x/(outSize-1) ) * cubeAxis[i][1] + -( -1 + 2.0f*y/(outSize-1) ) * cubeAxis[i][2];
 					dir.Normalize();
 					total[0] = total[1] = total[2] = 0;
 	//samples = 1;
-					float	limit = map ? 0.95 : 0.25;		// small for specular, almost hemisphere for ambient
+					float	limit = map ? 0.95f : 0.25f;		// small for specular, almost hemisphere for ambient
 
 					for ( int s = 0 ; s < samples ; s++ ) {
 						// pick a random direction vector that is inside the unit sphere but not behind dir,
@@ -1551,7 +1551,7 @@ void R_MakeAmbientMap_f( const idCmdArgs &args ) {
 							for ( int j = 0 ; j < 3 ; j++ ) {
 								test[j] = -1 + 2 * (rand()&0x7fff)/(float)0x7fff;
 							}
-							if ( test.Length() > 1.0 ) {
+							if ( test.Length() > 1.0f ) {
 								continue;
 							}
 							test.Normalize();
@@ -1686,12 +1686,12 @@ void GfxInfo_f( const idCmdArgs &args ) {
 
 	common->Printf( "%5.1f cm screen width (%4.1f\" diagonal)\n",
 		glConfig.physicalScreenWidthInCentimeters, glConfig.physicalScreenWidthInCentimeters / 2.54f
-			* sqrt( (float)(16*16 + 9*9) ) / 16.0f );
+			* idMath::Sqrt( (float)(16*16 + 9*9) ) / 16.0f );
 	extern idCVar r_forceScreenWidthCentimeters;
 	if ( r_forceScreenWidthCentimeters.GetFloat() ) {
 		common->Printf( "screen size manually forced to %5.1f cm width (%4.1f\" diagonal)\n",
 			renderSystem->GetPhysicalScreenWidthInCentimeters(), renderSystem->GetPhysicalScreenWidthInCentimeters() / 2.54f
-				* sqrt( (float)(16*16 + 9*9) ) / 16.0f );
+				* idMath::Sqrt( (float)(16*16 + 9*9) ) / 16.0f );
 	}
 }
 

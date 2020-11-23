@@ -232,8 +232,8 @@ idImage *idMaterial::GetEditorImage() const {
 
 // info parms
 typedef struct {
-	char	*name;
-	int		clearSolid, surfaceFlags, contents;
+	const char	*name;
+	int			clearSolid, surfaceFlags, contents;
 } infoParm_t;
 
 static infoParm_t	infoParms[] = {

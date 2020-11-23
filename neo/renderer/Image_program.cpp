@@ -221,19 +221,19 @@ static void R_AddNormalMaps( byte *data1, int width1, int height1, byte *data2, 
 			d1 = data1 + ( i * width1 + j ) * 4;
 			d2 = data2 + ( i * width1 + j ) * 4;
 
-			n[0] = ( d1[0] - 128 ) / 127.0;
-			n[1] = ( d1[1] - 128 ) / 127.0;
-			n[2] = ( d1[2] - 128 ) / 127.0;
+			n[0] = ( d1[0] - 128 ) / 127.0f;
+			n[1] = ( d1[1] - 128 ) / 127.0f;
+			n[2] = ( d1[2] - 128 ) / 127.0f;
 
 			// There are some normal maps that blend to 0,0,0 at the edges
 			// this screws up compression, so we try to correct that here by instead fading it to 0,0,1
 			len = n.LengthFast();
 			if ( len < 1.0f ) {
-				n[2] = idMath::Sqrt(1.0 - (n[0]*n[0]) - (n[1]*n[1]));
+				n[2] = idMath::Sqrt(1.0f - (n[0]*n[0]) - (n[1]*n[1]));
 			}
 
-			n[0] += ( d2[0] - 128 ) / 127.0;
-			n[1] += ( d2[1] - 128 ) / 127.0;
+			n[0] += ( d2[0] - 128 ) / 127.0f;
+			n[1] += ( d2[1] - 128 ) / 127.0f;
 			n.Normalize();
 
 			d1[0] = (byte)(n[0] * 127 + 128);

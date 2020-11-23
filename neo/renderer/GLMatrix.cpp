@@ -330,7 +330,7 @@ Sets up the world to view matrix for a given viewParm
 ======================
 */
 void R_SetupViewMatrix( viewDef_t *viewDef ) {
-	static float s_flipMatrix[16] = {
+	static const float s_flipMatrix[16] {
 		// convert from our coordinate system (looking down X)
 		// to OpenGL's coordinate system (looking down -Z)
 		 0, 0, -1, 0,
@@ -406,10 +406,10 @@ void R_SetupProjectionMatrix( viewDef_t *viewDef ) {
 	//
 	const float zNear = ( viewDef->renderView.cramZNear ) ? ( r_znear.GetFloat() * 0.25f ) : r_znear.GetFloat();
 
-	float ymax = zNear * tan( viewDef->renderView.fov_y * idMath::PI / 360.0f );
+	float ymax = zNear * tanf( viewDef->renderView.fov_y * idMath::PI / 360.0f );
 	float ymin = -ymax;
 
-	float xmax = zNear * tan( viewDef->renderView.fov_x * idMath::PI / 360.0f );
+	float xmax = zNear * tanf( viewDef->renderView.fov_x * idMath::PI / 360.0f );
 	float xmin = -xmax;
 
 	const float width = xmax - xmin;

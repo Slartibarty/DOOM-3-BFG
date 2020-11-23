@@ -251,8 +251,8 @@ FogFraction
 Height values below zero are inside the fog volume
 ================
 */
-static const float	RAMP_RANGE =	8;
-static const float	DEEP_RANGE =	-30;
+static const float	RAMP_RANGE =	8.0f;
+static const float	DEEP_RANGE =	-30.0f;
 static float	FogFraction( float viewHeight, float targetHeight ) {
 	float	total = idMath::Fabs( targetHeight - viewHeight );
 
@@ -260,19 +260,19 @@ static float	FogFraction( float viewHeight, float targetHeight ) {
 
 	// only ranges that cross the ramp range are special
 	if ( targetHeight > 0 && viewHeight > 0 ) {
-		return 0.0;
+		return 0.0f;
 	}
 	if ( targetHeight < -RAMP_RANGE && viewHeight < -RAMP_RANGE ) {
-		return 1.0;
+		return 1.0f;
 	}
 
 	float	above;
-	if ( targetHeight > 0 ) {
+	if ( targetHeight > 0.0f ) {
 		above = targetHeight;
-	} else if ( viewHeight > 0 ) {
+	} else if ( viewHeight > 0.0f ) {
 		above = viewHeight;
 	} else {
-		above = 0;
+		above = 0.0f;
 	}
 
 	float	rampTop, rampBottom;
@@ -284,20 +284,20 @@ static float	FogFraction( float viewHeight, float targetHeight ) {
 		rampTop = targetHeight;
 		rampBottom = viewHeight;
 	}
-	if ( rampTop > 0 ) {
-		rampTop = 0;
+	if ( rampTop > 0.0f ) {
+		rampTop = 0.0f;
 	}
 	if ( rampBottom < -RAMP_RANGE ) {
 		rampBottom = -RAMP_RANGE;
 	}
 
-	float	rampSlope = 1.0 / RAMP_RANGE;
+	float	rampSlope = 1.0f / RAMP_RANGE;
 
 	if ( !total ) {
 		return -viewHeight * rampSlope;
 	}
 
-	float ramp = ( 1.0 - ( rampTop * rampSlope + rampBottom * rampSlope ) * -0.5 ) * ( rampTop - rampBottom );
+	float ramp = ( 1.0f - ( rampTop * rampSlope + rampBottom * rampSlope ) * -0.5f ) * ( rampTop - rampBottom );
 
 	float	frac = ( total - above - ramp ) / total;
 
@@ -305,11 +305,11 @@ static float	FogFraction( float viewHeight, float targetHeight ) {
 	float deepest = viewHeight < targetHeight ? viewHeight : targetHeight;
 
 	float	deepFrac = deepest / DEEP_RANGE;
-	if ( deepFrac >= 1.0 ) {
-		return 1.0;
+	if ( deepFrac >= 1.0f ) {
+		return 1.0f;
 	}
 
-	frac = frac * ( 1.0 - deepFrac ) + deepFrac;
+	frac = frac * ( 1.0f - deepFrac ) + deepFrac;
 
 	return frac;
 }
@@ -370,12 +370,12 @@ void R_QuadraticImage( idImage *image ) {
 		for (y=0 ; y<QUADRATIC_HEIGHT ; y++) {
 			float	d;
 
-			d = x - (QUADRATIC_WIDTH/2 - 0.5);
+			d = x - (QUADRATIC_WIDTH/2 - 0.5f);
 			d = idMath::Fabs( d );
-			d -= 0.5;
+			d -= 0.5f;
 			d /= QUADRATIC_WIDTH/2;
 		
-			d = 1.0 - d;
+			d = 1.0f - d;
 			d = d * d;
 
 			b = (byte)(d * 255);

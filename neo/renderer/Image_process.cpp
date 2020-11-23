@@ -162,7 +162,7 @@ void	R_SetAlphaNormalDivergence( byte *in, int width, int height ) {
 			center[2] = ( pic_p[2] - 128 ) / 127;
 			center.Normalize();
 
-			float	maxDiverge = 1.0;
+			float	maxDiverge = 1.0f;
 
 			// FIXME: this assumes wrap mode, but should handle clamp modes and border colors
 			for ( int yy = -1 ; yy <= 1 ; yy++ ) {
@@ -221,10 +221,10 @@ byte *R_MipMapWithAlphaSpecularity( const byte *in, int width, int height ) {
 	in_p = in;
 	fbuf_p = fbuf;
 	for ( i = 0 ; i < c ; i++, in_p+=4, fbuf_p += 4 ) {
-		fbuf_p[0] = ( in_p[0] / 255.0 ) * 2.0 - 1.0;	// convert to a normal
-		fbuf_p[1] = ( in_p[1] / 255.0 ) * 2.0 - 1.0;
-		fbuf_p[2] = ( in_p[2] / 255.0 ) * 2.0 - 1.0;
-		fbuf_p[3] = ( in_p[3] / 255.0 );				// filtered divegence / specularity
+		fbuf_p[0] = ( in_p[0] / 255.0f ) * 2.0f - 1.0f;	// convert to a normal
+		fbuf_p[1] = ( in_p[1] / 255.0f ) * 2.0f - 1.0f;
+		fbuf_p[2] = ( in_p[2] / 255.0f ) * 2.0f - 1.0f;
+		fbuf_p[3] = ( in_p[3] / 255.0f );				// filtered divegence / specularity
 	}
 
 	row = width * 4;
@@ -264,7 +264,7 @@ byte *R_MipMapWithAlphaSpecularity( const byte *in, int width, int height ) {
 				}
 			}
 			total.Normalize();
-			totalSpec /= 9.0;
+			totalSpec /= 9.0f;
 
 			// find the maximum divergence
 			for ( x = -1 ; x <= 1 ; x++ ) {
