@@ -88,7 +88,15 @@ If you have questions concerning this license or the applicable additional terms
 
 #ifdef ID_PC_WIN
 
+#ifdef ID_PC_WIN64
+
+#define	CPUSTRING						"x64"
+
+#else
+
 #define	CPUSTRING						"x86"
+
+#endif
 
 #define	BUILD_STRING					"win-" CPUSTRING
 #define BUILD_OS_ID						0

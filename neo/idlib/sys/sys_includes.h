@@ -40,11 +40,14 @@ If you have questions concerning this license or the applicable additional terms
 
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// prevent auto literal to string conversion
 
+#include <intrin.h>			// needed for intrinsics like _mm_setzero_si28
+#include <malloc.h>			// no malloc.h on mac or unix
+
+#include <sdkddkver.h>
+#include <windows.h>		// for qgl.h
+
 #ifndef _D3SDK
 #ifndef GAME_DLL
-
-//#define _WIN32_WINNT 0x0602		// windows 8
-#include <sdkddkver.h>
 
 #include <winsock2.h>
 #include <mmsystem.h>
@@ -53,17 +56,10 @@ If you have questions concerning this license or the applicable additional terms
 #endif /* !GAME_DLL */
 #endif /* !_D3SDK */
 
-#include <intrin.h>			// needed for intrinsics like _mm_setzero_si28
-
-#pragma warning(disable : 4100)				// unreferenced formal parameter
-#pragma warning(disable : 4127)				// conditional expression is constant
-#pragma warning(disable : 4244)				// conversion to smaller type, possible loss of data
-#pragma warning(disable : 4714)				// function marked as __forceinline not inlined
-#pragma warning(disable : 4996)				// unsafe string operations
-
-#include <malloc.h>							// no malloc.h on mac or unix
-#include <windows.h>						// for qgl.h
-#undef FindText								// fix namespace pollution
+// fix namespace pollution
+#undef FindText
+#undef DrawText
+#undef CopyFile
 
 /*
 ================================================================================================
