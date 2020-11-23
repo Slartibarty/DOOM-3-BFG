@@ -320,6 +320,9 @@ bool idAnimState::UpdateState() {
 
 ***********************************************************************/
 
+const idEventDef AI_Vagary_ChooseObjectToThrow( "vagary_ChooseObjectToThrow", "vvfff", 'e' );
+const idEventDef AI_Vagary_ThrowObjectAtEnemy( "vagary_ThrowObjectAtEnemy", "ef" );
+
 const idEventDef AI_EnableEyeFocus( "enableEyeFocus" );
 const idEventDef AI_DisableEyeFocus( "disableEyeFocus" );
 const idEventDef EV_Footstep( "footstep" );
