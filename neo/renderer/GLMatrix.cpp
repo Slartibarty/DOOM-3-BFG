@@ -330,7 +330,7 @@ Sets up the world to view matrix for a given viewParm
 ======================
 */
 void R_SetupViewMatrix( viewDef_t *viewDef ) {
-	static const float s_flipMatrix[16] {
+	static const float s_flipMatrix[16] = {
 		// convert from our coordinate system (looking down X)
 		// to OpenGL's coordinate system (looking down -Z)
 		 0, 0, -1, 0,

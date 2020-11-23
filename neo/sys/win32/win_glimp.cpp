@@ -218,7 +218,7 @@ LRESULT CALLBACK FakeWndProc (
 	    return DefWindowProc(hWnd, uMsg, wParam, lParam);
 	}
 
-	const PIXELFORMATDESCRIPTOR pfd {
+	const PIXELFORMATDESCRIPTOR pfd = {
 		sizeof(PIXELFORMATDESCRIPTOR),
 		1,
 		PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,
