@@ -54,6 +54,7 @@ END
 // remains consistent on all systems.
 IDI_ICON1               ICON                    "res\\doom.ico"
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version
@@ -81,7 +82,7 @@ BEGIN
             VALUE "FileVersion", "1.0.0.1"
             VALUE "InternalName", "Doom3BFG"
             VALUE "LegalCopyright", "© 1993-2012 id Software LLC, a ZeniMax Media company"
-            VALUE "OriginalFilename", "Doom3BFG"
+            VALUE "OriginalFilename", "JaffaDoom3BFG.exe"
             VALUE "ProductName", "DOOM® 3: BFG Edition™"
             VALUE "ProductVersion", "1.0.0.1"
         END
