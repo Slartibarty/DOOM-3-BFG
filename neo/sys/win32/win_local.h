@@ -132,7 +132,6 @@ struct Win32Vars_t {
 	static idCVar	sys_arch;
 	static idCVar	sys_cpustring;
 	static idCVar	in_mouse;
-	static idCVar	win_allowAltTab;
 	static idCVar	win_notaskkeys;
 	static idCVar	win_username;
 	static idCVar	win_outputEditString;
