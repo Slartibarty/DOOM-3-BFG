@@ -140,8 +140,8 @@ Defines and macros usable in all code
 
 #define ALIGN( x, a ) ( ( ( x ) + ((a)-1) ) & ~((a)-1) )
 
-#define _alloca16( x )					((void *)ALIGN( (UINT_PTR)_alloca( ALIGN( x, 16 ) + 16 ), 16 ) )
-#define _alloca128( x )					((void *)ALIGN( (UINT_PTR)_alloca( ALIGN( x, 128 ) + 128 ), 128 ) )
+#define _alloca16( x )					((void *)ALIGN( (uintptr_t)_alloca( ALIGN( x, 16 ) + 16 ), 16 ) )
+#define _alloca128( x )					((void *)ALIGN( (uintptr_t)_alloca( ALIGN( x, 128 ) + 128 ), 128 ) )
 
 #define likely( x )	( x )
 #define unlikely( x )	( x )
@@ -186,6 +186,13 @@ bulk of the codebase, so it is the best place for analyze pragmas.
 
 // win32 needs this, but 360 doesn't
 #pragma warning( disable: 6540 )	// warning C6540: The use of attribute annotations on this function will invalidate all of its existing __declspec annotations [D:\tech5\engine\engine-10.vcxproj]
+
+// From sys_includes.h
+#pragma warning(disable: 4100)		// unreferenced formal parameter
+#pragma warning(disable: 4127)		// conditional expression is constant
+#pragma warning(disable: 4244)		// conversion to smaller type, possible loss of data
+#pragma warning(disable: 4714)		// function marked as __forceinline not inlined
+#pragma warning(disable: 4996)		// unsafe string operations
 
 // ignorable warnings introduced with the VS 2019 upgrade
 #pragma warning( disable: 4456 )	// warning C4456: declaration of 'k' hides previous local declaration

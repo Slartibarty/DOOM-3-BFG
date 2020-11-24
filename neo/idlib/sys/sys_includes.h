@@ -38,13 +38,7 @@ If you have questions concerning this license or the applicable additional terms
 ================================================================================================
 */
 
-#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// prevent auto literal to string conversion
-
-#include <intrin.h>			// needed for intrinsics like _mm_setzero_si28
-#include <malloc.h>			// no malloc.h on mac or unix
-
 #include <sdkddkver.h>
-#include <windows.h>		// for qgl.h
 
 #ifndef _D3SDK
 #ifndef GAME_DLL
@@ -55,6 +49,11 @@ If you have questions concerning this license or the applicable additional terms
 
 #endif /* !GAME_DLL */
 #endif /* !_D3SDK */
+
+#include <intrin.h>			// needed for intrinsics like _mm_setzero_si28
+#include <malloc.h>			// no malloc.h on mac or unix
+
+#include <windows.h>		// for qgl.h
 
 // fix namespace pollution
 #undef FindText
@@ -74,17 +73,20 @@ If you have questions concerning this license or the applicable additional terms
 	#define NDEBUG
 #endif
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
-#include <assert.h>
-#include <time.h>
-#include <ctype.h>
+// STD
+#include <cstdio>
+#include <cstdlib>
+#include <cstdarg>
+#include <cstring>
+#include <cassert>
+#include <ctime>
+#include <cctype>
+#include <cerrno>
+#include <cmath>
+#include <climits>
+
+// STL
 #include <typeinfo>
-#include <errno.h>
-#include <math.h>
-#include <limits.h>
 #include <memory>
 
 //-----------------------------------------------------
