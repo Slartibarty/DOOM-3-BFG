@@ -29,7 +29,6 @@ If you have questions concerning this license or the applicable additional terms
 #pragma hdrstop
 #include "../idlib/precompiled.h"
 
-
 #include "tr_local.h"
 
 /*
@@ -39,44 +38,6 @@ This file only has a single entry point:
 void R_LoadImage( const char *name, byte **pic, int *width, int *height, bool makePowerOf2 );
 
 */
-
-/*
- * Include file for users of JPEG library.
- * You will need to have included system headers that define at least
- * the typedefs FILE and size_t before you can include jpeglib.h.
- * (stdio.h is sufficient on ANSI-conforming systems.)
- * You may also wish to include "jerror.h".
- */
-
-#include "../thirdparty/libjpeg-turbo-custom/jconfig.h"
-#define JCONFIG_INCLUDED
-#include "../thirdparty/libjpeg-turbo/jpeglib.h"
-
-// hooks from jpeg lib to our system
-
-void jpg_Error( const char *fmt, ... ) {
-	va_list		argptr;
-	char		msg[2048];
-
-	va_start (argptr,fmt);
-	vsprintf (msg,fmt,argptr);
-	va_end (argptr);
-
-	common->FatalError( "%s", msg );
-}
-
-void jpg_Printf( const char *fmt, ... ) {
-	va_list		argptr;
-	char		msg[2048];
-
-	va_start (argptr,fmt);
-	vsprintf (msg,fmt,argptr);
-	va_end (argptr);
-
-	common->Printf( "%s", msg );
-}
-
-
 
 /*
 ================
@@ -131,7 +92,6 @@ struct TargaHeader {
 	unsigned short	x_origin, y_origin, width, height;
 	unsigned char	pixel_size, attributes;
 };
-
 
 /*
 =========================================================
@@ -385,7 +345,6 @@ static void LoadTGA( const char *name, byte **pic, int *width, int *height, ID_T
 
 JPG LOADING
 
-Interfaces with the huge libjpeg
 =========================================================
 */
 
@@ -394,176 +353,8 @@ Interfaces with the huge libjpeg
 LoadJPG
 =============
 */
-static void LoadJPG( const char *filename, unsigned char **pic, int *width, int *height, ID_TIME_T *timestamp ) {
-  /* This struct contains the JPEG decompression parameters and pointers to
-   * working space (which is allocated as needed by the JPEG library).
-   */
-  struct jpeg_decompress_struct cinfo;
-  /* We use our private extension JPEG error handler.
-   * Note that this struct must live as long as the main JPEG parameter
-   * struct, to avoid dangling-pointer problems.
-   */
-  /* This struct represents a JPEG error handler.  It is declared separately
-   * because applications often want to supply a specialized error handler
-   * (see the second half of this file for an example).  But here we just
-   * take the easy way out and use the standard error handler, which will
-   * print a message on stderr and call exit() if compression fails.
-   * Note that this struct must live as long as the main JPEG parameter
-   * struct, to avoid dangling-pointer problems.
-   */
-  struct jpeg_error_mgr jerr;
-  /* More stuff */
-  JSAMPARRAY buffer;		/* Output row buffer */
-  int row_stride;		/* physical row width in output buffer */
-  unsigned char *out;
-  byte	*fbuffer;
-  byte  *bbuf;
-
-  /* In this example we want to open the input file before doing anything else,
-   * so that the setjmp() error recovery below can assume the file is open.
-   * VERY IMPORTANT: use "b" option to fopen() if you are on a machine that
-   * requires it in order to read binary files.
-   */
-
-	// JDC: because fill_input_buffer() blindly copies INPUT_BUF_SIZE bytes,
-	// we need to make sure the file buffer is padded or it may crash
-  if ( pic ) {
-	*pic = NULL;		// until proven otherwise
-  }
-
-  int	len;
-
-  {
-		idFile *f;
-
-		f = fileSystem->OpenFileRead( filename );
-		if ( !f ) {
-			return;
-		}
-		len = f->Length();
-		if ( timestamp ) {
-			*timestamp = f->Timestamp();
-		}
-		if ( !pic ) {
-			fileSystem->CloseFile( f );
-			return;	// just getting timestamp
-		}
-		fbuffer = (byte *)Mem_ClearedAlloc( len + 4096, TAG_JPG );
-		f->Read( fbuffer, len );
-		fileSystem->CloseFile( f );
-  }
-
-
-  /* Step 1: allocate and initialize JPEG decompression object */
-
-  /* We have to set up the error handler first, in case the initialization
-   * step fails.  (Unlikely, but it could happen if you are out of memory.)
-   * This routine fills in the contents of struct jerr, and returns jerr's
-   * address which we place into the link field in cinfo.
-   */
-  cinfo.err = jpeg_std_error(&jerr);
-
-  /* Now we can initialize the JPEG decompression object. */
-  jpeg_create_decompress(&cinfo);
-
-  /* Step 2: specify data source (eg, a file) */
-
-  jpeg_mem_src(&cinfo, fbuffer, len);
-
-  /* Step 3: read file parameters with jpeg_read_header() */
-
-  (void) jpeg_read_header(&cinfo, true );
-  /* We can ignore the return value from jpeg_read_header since
-   *   (a) suspension is not possible with the stdio data source, and
-   *   (b) we passed TRUE to reject a tables-only JPEG file as an error.
-   * See libjpeg.doc for more info.
-   */
-
-  /* Step 4: set parameters for decompression */
-
-  /* In this example, we don't need to change any of the defaults set by
-   * jpeg_read_header(), so we do nothing here.
-   */
-
-  /* Step 5: Start decompressor */
-
-  (void) jpeg_start_decompress(&cinfo);
-  /* We can ignore the return value since suspension is not possible
-   * with the stdio data source.
-   */
-
-  /* We may need to do some setup of our own at this point before reading
-   * the data.  After jpeg_start_decompress() we have the correct scaled
-   * output image dimensions available, as well as the output colormap
-   * if we asked for color quantization.
-   * In this example, we need to make an output work buffer of the right size.
-   */ 
-  /* JSAMPLEs per row in output buffer */
-  row_stride = cinfo.output_width * cinfo.output_components;
-
-  if (cinfo.output_components!=4) {
-		common->DWarning( "JPG %s is unsupported color depth (%d)", 
-			filename, cinfo.output_components);
-  }
-  out = (byte *)R_StaticAlloc(cinfo.output_width*cinfo.output_height*4, TAG_IMAGE);
-
-  *pic = out;
-  *width = cinfo.output_width;
-  *height = cinfo.output_height;
-
-  /* Step 6: while (scan lines remain to be read) */
-  /*           jpeg_read_scanlines(...); */
-
-  /* Here we use the library's state variable cinfo.output_scanline as the
-   * loop counter, so that we don't have to keep track ourselves.
-   */
-  while (cinfo.output_scanline < cinfo.output_height) {
-    /* jpeg_read_scanlines expects an array of pointers to scanlines.
-     * Here the array is only one element long, but you could ask for
-     * more than one scanline at a time if that's more convenient.
-     */
-	bbuf = ((out+(row_stride*cinfo.output_scanline)));
-	buffer = &bbuf;
-    (void) jpeg_read_scanlines(&cinfo, buffer, 1);
-  }
-
-  // clear all the alphas to 255
-  {
-	  int	i, j;
-		byte	*buf;
-
-		buf = *pic;
-
-	  j = cinfo.output_width * cinfo.output_height * 4;
-	  for ( i = 3 ; i < j ; i+=4 ) {
-		  buf[i] = 255;
-	  }
-  }
-
-  /* Step 7: Finish decompression */
-
-  (void) jpeg_finish_decompress(&cinfo);
-  /* We can ignore the return value since suspension is not possible
-   * with the stdio data source.
-   */
-
-  /* Step 8: Release JPEG decompression object */
-
-  /* This is an important step since it will release a good deal of memory. */
-  jpeg_destroy_decompress(&cinfo);
-
-  /* After finish_decompress, we can close the input file.
-   * Here we postpone it until after no more JPEG errors are possible,
-   * so as to simplify the setjmp error logic above.  (Actually, I don't
-   * think that jpeg_destroy can do an error exit, but why assume anything...)
-   */
-  Mem_Free( fbuffer );
-
-  /* At this point you may want to check to see whether any corrupt-data
-   * warnings occurred (test whether jerr.pub.num_warnings is nonzero).
-   */
-
-  /* And we're done! */
+static void LoadJPG( const char *filename, byte **pic, int *width, int *height, ID_TIME_T *timestamp ) {
+	common->Error( "Tried to load a jpeg: %s\n", filename );
 }
 
 //===================================================================
@@ -636,10 +427,10 @@ void R_LoadImage( const char *cname, byte **pic, int *width, int *height, ID_TIM
 		}
 	}
 
+#if 0
 	//
 	// convert to exact power of 2 sizes
 	//
-	/*
 	if ( pic && *pic && makePowerOf2 ) {
 		int		w, h;
 		int		scaled_width, scaled_height;
@@ -661,9 +452,8 @@ void R_LoadImage( const char *cname, byte **pic, int *width, int *height, ID_TIM
 			*height = scaled_height;
 		}
 	}
-	*/
+#endif
 }
-
 
 /*
 =======================
@@ -673,14 +463,12 @@ Loads six files with proper extensions
 =======================
 */
 bool R_LoadCubeImages( const char *imgName, cubeFiles_t extensions, byte *pics[6], int *outSize, ID_TIME_T *timestamp ) {
-	int		i, j;
-	char	*cameraSides[6] =  { "_forward.tga", "_back.tga", "_left.tga", "_right.tga", 
-		"_up.tga", "_down.tga" };
-	char	*axisSides[6] =  { "_px.tga", "_nx.tga", "_py.tga", "_ny.tga", 
-		"_pz.tga", "_nz.tga" };
-	char	**sides;
-	char	fullName[MAX_IMAGE_NAME];
-	int		width, height, size = 0;
+	int			i, j;
+	const char	*cameraSides[6] = { "_forward.tga", "_back.tga", "_left.tga", "_right.tga", "_up.tga", "_down.tga" };
+	const char	*axisSides[6] = { "_px.tga", "_nx.tga", "_py.tga", "_ny.tga", "_pz.tga", "_nz.tga" };
+	const char	**sides;
+	char		fullName[MAX_IMAGE_NAME];
+	int			width, height, size = 0;
 
 	if ( extensions == CF_CAMERA ) {
 		sides = cameraSides;

@@ -121,7 +121,7 @@ project( "Doom3BFG" )
 	language( "C++" )
 	defines( { "__DOOM__" } )
 	links( { "xaudio2", "xinput", "dinput8", "dxguid", "opengl32", "winmm", "dbghelp", "ws2_32" } )
-	links( { "zlib", "libjpeg-turbo", "idLib", "Game" } )
+	links( { "zlib", "idLib", "Game" } )
 	
 	pchsource( "neo/framework/precompiled.cpp" )
 	pchheader( "" )
