@@ -2,6 +2,6 @@
 	path = neo/thirdparty/zlib
 	url = https://github.com/madler/zlib.git
 	branch = develop
-[submodule "neo/thirdparty/libjpeg-turbo"]
-	path = neo/thirdparty/libjpeg-turbo
-	url = https://github.com/libjpeg-turbo/libjpeg-turbo.git
+[submodule "neo/thirdparty/stb"]
+	path = neo/thirdparty/stb
+	url = https://github.com/nothings/stb.git

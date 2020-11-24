@@ -59,6 +59,7 @@ If you have questions concerning this license or the applicable additional terms
 #undef FindText
 #undef DrawText
 #undef CopyFile
+#undef LoadImage
 
 /*
 ================================================================================================

@@ -74,9 +74,6 @@ void R_WriteTGA( const char *filename, const byte *data, int width, int height, 
 	fileSystem->WriteFile( filename, buffer, bufferSize, basePath );
 }
 
-static void LoadTGA( const char *name, byte **pic, int *width, int *height, ID_TIME_T *timestamp );
-static void LoadJPG( const char *name, byte **pic, int *width, int *height, ID_TIME_T *timestamp );
-
 /*
 ========================================================================
 
@@ -340,23 +337,6 @@ static void LoadTGA( const char *name, byte **pic, int *width, int *height, ID_T
 	fileSystem->FreeFile( buffer );
 }
 
-/*
-=========================================================
-
-JPG LOADING
-
-=========================================================
-*/
-
-/*
-=============
-LoadJPG
-=============
-*/
-static void LoadJPG( const char *filename, byte **pic, int *width, int *height, ID_TIME_T *timestamp ) {
-	common->Error( "Tried to load a jpeg: %s\n", filename );
-}
-
 //===================================================================
 
 /*
@@ -365,8 +345,6 @@ R_LoadImage
 
 Loads any of the supported image types into a cannonical
 32 bit format.
-
-Automatically attempts to load .jpg files if .tga files fail to load.
 
 *pic will be NULL if the load failed.
 
@@ -406,19 +384,8 @@ void R_LoadImage( const char *cname, byte **pic, int *width, int *height, ID_TIM
 	}
 
 	name.ToLower();
-	idStr ext;
-	name.ExtractFileExtension( ext );
 
-	if ( ext == "tga" ) {
-		LoadTGA( name.c_str(), pic, width, height, timestamp );            // try tga first
-		if ( ( pic && *pic == 0 ) || ( timestamp && *timestamp == -1 ) ) { //-V595
-			name.StripFileExtension();
-			name.DefaultFileExtension( ".jpg" );
-			LoadJPG( name.c_str(), pic, width, height, timestamp );
-		}
-	} else if ( ext == "jpg" ) {
-		LoadJPG( name.c_str(), pic, width, height, timestamp );
-	}
+	LoadTGA( name.c_str(), pic, width, height, timestamp );		// we only support tga for game assets now
 
 	if ( ( width && *width < 1 ) || ( height && *height < 1 ) ) {
 		if ( pic && *pic ) {

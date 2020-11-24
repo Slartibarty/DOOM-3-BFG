@@ -117,6 +117,7 @@ project( "Game" )
 	removefiles( { "neo/d3xp/EndLevel.*", "neo/d3xp/gamesys/Callbacks.cpp", "neo/d3xp/menus/MenuWidget_DevList.cpp" } )
 	
 project( "Doom3BFG" )
+	targetname( "JaffaDoom3BFG" ) -- Prevent Windows from applying a compatibility profile
 	kind( "WindowedApp" )
 	language( "C++" )
 	defines( { "__DOOM__" } )
